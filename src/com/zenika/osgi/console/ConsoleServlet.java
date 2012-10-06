@@ -50,7 +50,9 @@ public class ConsoleServlet extends HttpServlet implements ManagedService {
 			e.printStackTrace();
 		}
 		tabs.put("Framework StartLevel", UIHelper.getFrameworkStartLevel(bundleContext.getBundle(0).adapt(FrameworkStartLevel.class)));	
-		tabs.put("H2 settings", UIHelper.getDatabaseSettings(dataSourceFactory));
+		if (dataSourceFactory != null) {
+			tabs.put("H2 settings", UIHelper.getDatabaseSettings(dataSourceFactory));
+		}
 		tabs.put("Properties", UIHelper.getSystemProperties());
 		resp.getWriter().print(UIHelper.getTabs(tabs));
 		
@@ -63,6 +65,10 @@ public class ConsoleServlet extends HttpServlet implements ManagedService {
 	
 	public void bindDataSourceFactory(DataSourceFactory dataSourceFactory) {
 		this.dataSourceFactory = dataSourceFactory;
+	}
+	
+	public void unbindDataSourceFactory(DataSourceFactory dataSourceFactory) {
+		this.dataSourceFactory = null;
 	}
 	
 	@Override

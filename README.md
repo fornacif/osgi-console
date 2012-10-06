@@ -1,2 +1,3 @@
-osgi-console
+OSGi Console
 ============
+Demo application

@@ -19,22 +19,19 @@ import aQute.bnd.annotation.component.Activate;
 import aQute.bnd.annotation.component.Component;
 import aQute.bnd.annotation.component.Reference;
 
-@Component(name="console", provide = {Servlet.class})
-public class ConsoleServlet extends HttpServlet /*implements ManagedService*/ {
+@SuppressWarnings("serial")
+@Component(name="console", provide = {Servlet.class}, designate=ConsoleServletConfig.class)
+public class ConsoleServlet extends HttpServlet {
 	private BundleContext bundleContext;
 	
-	private String title;
+	private String title = "OSGi Console";
 	
 	private DataSourceFactory dataSourceFactory;
 	
 	@Activate
-	public void activate(BundleContext bundleContext, Map<String, ?> properties) {
+	public void configure(BundleContext bundleContext, Map<String, ?> properties) {
 		this.bundleContext = bundleContext;
 		title = (String) properties.get("title");
-		
-//		Dictionary<String, String> properties = new Hashtable<>();
-//		properties.put(Constants.SERVICE_PID, "console");
-//		bundleContext.registerService(ManagedService.class, this, properties);
 	}
 
 	@Override
@@ -72,12 +69,5 @@ public class ConsoleServlet extends HttpServlet /*implements ManagedService*/ {
 	public void unbindDataSourceFactory(DataSourceFactory dataSourceFactory) {
 		this.dataSourceFactory = null;
 	}
-
-//	@Override
-//	public void updated(Dictionary<String, ?> properties) throws ConfigurationException {
-//		if (properties != null) {
-//			title = (String) properties.get("title");
-//		}	
-//	}
 
 }

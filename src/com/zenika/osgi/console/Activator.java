@@ -1,5 +1,8 @@
 package com.zenika.osgi.console;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.ServletException;
 
 import org.osgi.framework.BundleActivator;
@@ -10,23 +13,24 @@ import org.osgi.service.http.NamespaceException;
 import org.osgi.util.tracker.ServiceTracker;
 
 public class Activator implements BundleActivator {
+	private BundleContext bundleContext;
 	private ServiceTracker<HttpService, HttpService> serviceTracker;
-//	private BundleContext bundleContext;
 
 	public void start(BundleContext bundleContext) throws Exception {	
-//		this.bundleContext = bundleContext;
-
+		this.bundleContext = bundleContext;
+		
 		serviceTracker = new ServiceTracker<HttpService, HttpService>(bundleContext, HttpService.class, null) {
 			@Override
 			public HttpService addingService(ServiceReference<HttpService> reference) {
 				HttpService httpService = super.addingService(reference);
 				try {
 					registerResources(httpService);
+					//registerConsoleServlet(httpService);
 				} catch (ServletException | NamespaceException e) {
 					e.printStackTrace();
 				}
 				return httpService;
-			}
+			}	
 		};
 		
 		serviceTracker.open();
@@ -38,8 +42,16 @@ public class Activator implements BundleActivator {
 	
 	private void registerResources(HttpService httpService) throws ServletException, NamespaceException {
 		System.out.println("Registering resources");
-		//httpService.registerServlet("/console", new ConsoleServlet(bundleContext), null, null);
-		httpService.registerResources("/", "", null);
+		httpService.registerResources("/", "", null);	
+	}
+	
+	@SuppressWarnings("unused")
+	private void registerConsoleServlet(HttpService httpService) throws ServletException, NamespaceException {
+		ConsoleServlet consoleServlet = new ConsoleServlet();
+		Map<String, String> properties = new HashMap<>();
+		properties.put("title", "OSGi Console");
+		consoleServlet.configure(bundleContext, properties);
+		httpService.registerServlet("/console", consoleServlet, null, null);	
 	}
 
 }

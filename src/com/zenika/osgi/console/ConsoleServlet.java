@@ -24,7 +24,7 @@ import aQute.bnd.annotation.component.Reference;
 public class ConsoleServlet extends HttpServlet {
 	private BundleContext bundleContext;
 	
-	private String title = "OSGi Console";
+	private String title;
 	
 	private DataSourceFactory dataSourceFactory;
 	

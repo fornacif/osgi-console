@@ -51,7 +51,7 @@ public class Activator implements BundleActivator {
 		Map<String, String> properties = new HashMap<>();
 		properties.put("title", "OSGi Console");
 		consoleServlet.configure(bundleContext, properties);
-		httpService.registerServlet("/console", consoleServlet, null, null);	
+		httpService.registerServlet("/console", consoleServlet, null, null);
 	}
 
 }

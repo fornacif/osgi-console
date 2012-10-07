@@ -1,35 +1,36 @@
 package com.zenika.osgi.console;
 
 import java.io.IOException;
-import java.util.Dictionary;
-import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.startlevel.FrameworkStartLevel;
-import org.osgi.service.cm.ConfigurationException;
-import org.osgi.service.cm.ManagedService;
 import org.osgi.service.jdbc.DataSourceFactory;
 
-@SuppressWarnings("serial")
-public class ConsoleServlet extends HttpServlet implements ManagedService {
+import aQute.bnd.annotation.component.Activate;
+import aQute.bnd.annotation.component.Component;
+import aQute.bnd.annotation.component.Reference;
 
+@Component(name="console", provide = {Servlet.class})
+public class ConsoleServlet extends HttpServlet /*implements ManagedService*/ {
 	private BundleContext bundleContext;
 	
 	private String title;
 	
 	private DataSourceFactory dataSourceFactory;
 	
-	public void activate(BundleContext bundleContext) {
+	@Activate
+	public void activate(BundleContext bundleContext, Map<String, ?> properties) {
 		this.bundleContext = bundleContext;
+		title = (String) properties.get("title");
 		
 //		Dictionary<String, String> properties = new Hashtable<>();
 //		properties.put(Constants.SERVICE_PID, "console");
@@ -63,6 +64,7 @@ public class ConsoleServlet extends HttpServlet implements ManagedService {
 		this.title = title;
 	}
 	
+	@Reference(optional=true, dynamic=true)
 	public void bindDataSourceFactory(DataSourceFactory dataSourceFactory) {
 		this.dataSourceFactory = dataSourceFactory;
 	}
@@ -70,12 +72,12 @@ public class ConsoleServlet extends HttpServlet implements ManagedService {
 	public void unbindDataSourceFactory(DataSourceFactory dataSourceFactory) {
 		this.dataSourceFactory = null;
 	}
-	
-	@Override
-	public void updated(Dictionary<String, ?> properties) throws ConfigurationException {
-		if (properties != null) {
-			title = (String) properties.get("title");
-		}
-	}
+
+//	@Override
+//	public void updated(Dictionary<String, ?> properties) throws ConfigurationException {
+//		if (properties != null) {
+//			title = (String) properties.get("title");
+//		}	
+//	}
 
 }

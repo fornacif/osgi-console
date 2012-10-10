@@ -1,4 +1,4 @@
-package com.zenika.osgi.console;
+package com.zenika.osgi.console.internal;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -55,10 +55,6 @@ public class ConsoleServlet extends HttpServlet {
 		resp.getWriter().print(UIHelper.getTabs(tabs));
 		
 		resp.getWriter().print(UIHelper.getFooter());
-	}
-	
-	public void setTitle(String title) {
-		this.title = title;
 	}
 	
 	@Reference(optional=true, dynamic=true)

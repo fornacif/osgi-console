@@ -1,4 +1,4 @@
-package com.zenika.osgi.console;
+package com.zenika.osgi.console.internal;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -7,6 +7,9 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.hooks.service.FindHook;
 
+import aQute.bnd.annotation.component.Component;
+
+@Component
 public class ServiceFilter implements FindHook {
 
 	@Override
@@ -17,7 +20,7 @@ public class ServiceFilter implements FindHook {
 		
 		for (Iterator<ServiceReference<?>> iterator = references.iterator(); iterator.hasNext();) {
 			ServiceReference<?> serviceReference = iterator.next();	
-			if (bundleContext.getBundle().getSymbolicName().equals("osgi.console") && serviceReference.getUsingBundles() == null) {
+			if (bundleContext.getBundle().getSymbolicName().equals("com.zenika.osgi.console") && serviceReference.getUsingBundles() == null) {
 				iterator.remove();
 			}
 		}

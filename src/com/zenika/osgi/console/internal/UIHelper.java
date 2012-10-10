@@ -1,4 +1,4 @@
-package com.zenika.osgi.console;
+package com.zenika.osgi.console.internal;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

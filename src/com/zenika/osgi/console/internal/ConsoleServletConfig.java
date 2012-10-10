@@ -1,4 +1,4 @@
-package com.zenika.osgi.console;
+package com.zenika.osgi.console.internal;
 
 public interface ConsoleServletConfig {
 	public String alias();
